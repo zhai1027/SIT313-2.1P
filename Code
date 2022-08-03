@@ -81,11 +81,12 @@
 
         var EA
         function GetInput(){
-            var input = document.getElementById("email_address")
-            EA = input
+        var input = document.getElementById("email_address")
+        EA = input
         }
         sendMail({
-            to: "EA",
+            GetInput,
+            to: EA,
             from: "593026295@qq.com",
             subject: "Node.js which is for SIT313 2.1P",
             text: "Thanks for subscribe my email!(SIT313 2.1P)"

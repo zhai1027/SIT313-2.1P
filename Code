@@ -1,0 +1,92 @@
+        const express = require("express")
+        const bodyParser = require("body-parser")
+        const https = require("https")
+
+        const app = express()
+        app.use(bodyParser.urlencoded({extended:true}))
+        app.use(express.static("public"))
+
+
+        app.get('/', (req,res)=>{
+            res.sendFile(__dirname + "/index.html")
+        })
+
+
+        app.post('/' , (req,res)=>{
+            const firstname = req.body.first_name
+            const lastname = req.body.last_name
+            const email = req.body.email
+
+            const api = "a5ccafbf1f287980538fcdfde23a485e"
+            const listid= "dc064aaeb6"
+            const url = "https://us14.api.mailchimp.com/3.0/lists/dc064aaeb6"
+
+            const data = {
+                members:[
+                    {
+                    email_address : email,
+                    status: "subscribed",
+                    merge_fields: {
+                        FNAME : firstname,
+                        lNAME : lastname
+                                }
+                    }
+                        ]
+                        }
+
+            var jsonData = JSON.stringify(data)
+
+            const options= {
+                method :"POST",
+                auth:"SIT313:" + api
+            }
+
+            const request = https.request(url,options,function(response)
+            {
+            response.on("data", function(data){
+                console.log(JSON.parse(data))
+            })
+            })
+
+            request.write(jsonData)
+            request.end()
+
+        })
+
+        app.listen(8080, function(){
+        console.log("Server is running on port 3000")
+        })
+
+        require('dotenv').config();
+
+        const sgMail = require("@sendgrid/mail");
+        const { EmailAddress } = require("@sendgrid/helpers/classes")
+        const { request } = require("http")
+        const { group } = require("console")
+
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+        const sendMail = async (msg) => {
+            try {
+                await sgMail.send(msg);
+                console.log("Message sent successfully!");
+            }catch(error){
+                console.error(error);
+
+                if (error.response){
+                    console.error(error.response.body);
+                }
+            }
+        };
+
+        var EA
+        function GetInput(){
+            var input = document.getElementById("email_address")
+            EA = input
+        }
+        sendMail({
+            to: "zhaiziyan20001027@gmail.com",
+            from: "593026295@qq.com",
+            subject: "Node.js which is for SIT313 2.1P",
+            text: "Thanks for subscribe my email!(SIT313 2.1P)"
+        });

@@ -85,7 +85,7 @@
             EA = input
         }
         sendMail({
-            to: "zhaiziyan20001027@gmail.com",
+            to: "EA",
             from: "593026295@qq.com",
             subject: "Node.js which is for SIT313 2.1P",
             text: "Thanks for subscribe my email!(SIT313 2.1P)"
